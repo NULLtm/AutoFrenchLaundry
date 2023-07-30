@@ -56,14 +56,14 @@ driver.find_element(By.XPATH, "//button[@data-testid='signin']").click()
 time.sleep(5)
 driver.find_element(By.XPATH, "//a[@data-testid='offering-book-button_DiningRoom']").click()
 
-dt = datetime(RELEASE_YEAR, RELEASE_MONTH, RELEASE_DAY, RELEASE_TIME_24_HOUR_UTC)
+dt = datetime(int(RELEASE_YEAR), int(RELEASE_MONTH), int(RELEASE_DAY), int(RELEASE_TIME_24_HOUR_UTC))
 pause.until(dt)
-
+print("GOT TO TIME")
 month = driver.find_element(By.XPATH, f"//span[text()='{MONTH + ' ' + YEAR}']//..//..//..")
 month.find_element(By.XPATH, f"//span[text()={DAY}]//..").click()
 time.sleep(3)
 driver.find_element(By.XPATH, f"//div[@class='SearchModal-body']//span[text()={TIME + ' ' + AM_PM}]//..//..//..").click()
 time.sleep(3)
-send_message("Found a spot")
+#send_message("Found a spot")
 
 driver.quit()
