@@ -53,25 +53,17 @@ def send_message(msg):
 
 driver = webdriver.Chrome()
 driver.get("https://www.exploretock.com/login?continue=%2F")
-# WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//span[text()='Log in']//..")))
-# driver.find_element(By.XPATH, "//span[text()='Log in']//..").click()
+
 WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.ID, "email")))
 WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.ID, "password")))
 WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//button[@data-testid='signin']")))
 driver.find_element(By.ID, "email").send_keys(USERNAME)
 driver.find_element(By.ID, "password").send_keys(PASSWORD)
 driver.find_element(By.XPATH, "//button[@data-testid='signin']").click()
+
 WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//button[@data-testid='search-button']")))
 
 driver.get(f"https://www.exploretock.com/{RESTAURANT}")
-
-
-# driver.find_element(By.XPATH, "//button[@data-testid='search-button']").click()
-# WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//input[@aria-label='Search']")))
-# driver.find_element(By.XPATH, "//input[@aria-label='Search']").send_keys(RESTAURANT)
-# WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//div[contains(@class,'SearchBar-results')]//ul//li")))
-# time.sleep(0.5)
-# driver.find_elements(By.XPATH, "//div[contains(@class,'SearchBar-results')]//ul//li")[2].click()
 
 print("On restaurant home page, now waiting for release time...")
 dt = datetime(int(RELEASE_YEAR), int(RELEASE_MONTH), int(RELEASE_DAY), int(RELEASE_TIME_24_HOUR_UTC))
@@ -85,11 +77,12 @@ def find_option():
         WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//div[@class='SearchBarModalContainer']")))
         # time.sleep(4)
         options = driver.find_elements(By.XPATH, "//button[contains(@class, 'is-available') and contains(@class, 'Consumer-resultsListItem')]")
+        options.reverse()
         for option in options:
             option.click()
+            send_message("A spot have been found!")
             return
     send_message("Spot not found...")
 find_option()
-send_message("A spot have been found!")
 time.sleep(1000)
 driver.quit()
