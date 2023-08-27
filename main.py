@@ -88,7 +88,7 @@ def find_option(exp):
                 option.click()
                 send_message("A spot have been found!")
                 driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
-                WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//iframe[@type='cvv']")))
+                WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, "//iframe[@type='cvv']")))
                 # time.sleep(1)
                 driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@type='cvv']"))
                 driver.find_element(By.XPATH, "//input[@placeholder='CVC']").send_keys(SSV)
