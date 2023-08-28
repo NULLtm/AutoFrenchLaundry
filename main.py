@@ -77,8 +77,8 @@ print("GOT TO TIME")
 def find_option(exp):
     for date in DATES:
         driver.get(f"https://www.exploretock.com/{RESTAURANT}/experience/{exp}?date={date}&size={PARTY_SIZE}&time=20%3A00")
-        WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//div[@class='SearchModal-body']")))
-        WebDriverWait(driver, 60).until(EC.presence_of_element_located((By.XPATH, "//div[@class='SearchBarModalContainer']")))
+        WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, "//div[@class='SearchModal-body']")))
+        WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, "//div[@class='SearchBarModalContainer']")))
         # time.sleep(4)
         for date2 in DATES:
             driver.find_element(By.XPATH, f"//button[@aria-label='{date2}']").click()
@@ -86,15 +86,17 @@ def find_option(exp):
             # options.reverse()
             for option in options:
                 option.click()
-                send_message("A spot have been found!")
-                driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
-                WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, "//iframe[@type='cvv']")))
-                # time.sleep(1)
-                driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@type='cvv']"))
-                driver.find_element(By.XPATH, "//input[@placeholder='CVC']").send_keys(SSV)
-                # driver.find_element(By.XPATH, "//button[@data-testid='submit-purchase-button']").click()
-                send_message("Reservation has been purchased!")
-                return
+                time.sleep(0.2)
+                try:
+                    driver.find_element(By.XPATH, "//div[@class='MuiAlert-message']").send_keys(SSV)
+                except:
+                    send_message("Reservation found")
+                    driver.execute_script("window.scrollTo(0,document.body.scrollHeight)")
+                    WebDriverWait(driver, 2).until(EC.presence_of_element_located((By.XPATH, "//iframe[@type='cvv']")))
+                    driver.switch_to.frame(driver.find_element(By.XPATH, "//iframe[@type='cvv']"))
+                    driver.find_element(By.XPATH, "//input[@placeholder='CVC']").send_keys(SSV)
+                    # driver.find_element(By.XPATH, "//button[@data-testid='submit-purchase-button']").click()
+                    return
     send_message(f"Spot not found in experience {exp}...")
 for exp in EXPERIENCES:
     find_option(exp)
